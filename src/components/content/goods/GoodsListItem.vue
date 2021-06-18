@@ -26,7 +26,7 @@
 
 <style scoped>
   .goods-item {
-    padding-bottom: 40px;
+    padding-bottom: 36px;
     width: 48%;
   }
 
