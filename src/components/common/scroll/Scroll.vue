@@ -32,20 +32,27 @@
         probeType: this.probeType,
         pullUpLoad: this.pullUpLoad
       })
-      this.scroll.on('scroll', (position) => {
-        this.$emit('scroll', position)
-      })
-      this.scroll.on('pullingUp', () => {
-        this.$emit('pullingUp')
-      })
+      if (this.probeType === 2 || this.probeType === 3) {
+        this.scroll.on('scroll', (position) => {
+          this.$emit('scroll', position)
+        })
+      }
+      if (this.pullUpLoad) {
+        this.scroll.on('pullingUp', () => {
+          this.$emit('pullingUp')
+        })
+      }
     },
     methods: {
       scrollTo(x, y, timeout = 500) {
-        this.scroll.scrollTo(x, y, timeout);
+        this.scroll && this.scroll.scrollTo(x, y, timeout);
       },
-      finishPullUp(){
-        this.scroll.finishPullUp()
+      finishPullUp() {
+        this.scroll && this.scroll.finishPullUp()
       },
+      refresh() {
+        this.scroll && this.scroll.refresh()
+      }
     }
   }
 </script>

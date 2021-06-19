@@ -3,19 +3,13 @@
     <nav-bar class="home-nav">
       <template v-slot:center>购物街</template>
     </nav-bar>
-
-    <scroll class="content"
-            ref="scroll"
-            :probe-type="3"
-            :pull-up-load="true"
-            @scroll="contentScroll"
+    <tab-control :titles="tabTitles" @tabClick="tabClick" ref="tabControlFixed" v-show="isTabFixed"/>
+    <scroll class="content" ref="scroll" :probe-type="3" :pull-up-load="true" @scroll="contentScroll"
             @pullingUp="loadMore">
-      <home-swiper :banners="banners"></home-swiper>
-      <home-recommend :recommends="recommends"></home-recommend>
-      <home-feature/>
-      <tab-control class="tab-control"
-                   :titles="['流行','新款','精选']"
-                   @tabClick="tabClick"/>
+      <home-swiper :banners="banners" @swiperImageLoad.once="imageLoad"></home-swiper>
+      <home-recommend :recommends="recommends" @recommendImageLoad.once="imageLoad"></home-recommend>
+      <home-feature @featureImageLoad.once="imageLoad"/>
+      <tab-control :titles="tabTitles" @tabClick="tabClick" ref="tabControlScroll" v-show="!isTabFixed"/>
       <goods-list :goods="goods[currentType]['list']"/>
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop"/>
@@ -34,6 +28,7 @@
   import HomeFeature from "./childComps/HomeFeature";
 
   import {getHomeMultiData, getHomeGoods} from "network/home";
+  import {debounce} from "common/utils"
 
   export default {
     name: "Home",
@@ -51,6 +46,9 @@
       return {
         banners: [],
         recommends: [],
+        tabTitles: ['流行', '新款', '精选'],
+        tabOffsetTop: 0,
+        isTabFixed: false,
         goods: {
           'pop': {page: 0, list: []},
           'new': {page: 0, list: []},
@@ -67,22 +65,33 @@
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
     },
+    mounted() {
+      const refresh = debounce(this.$refs.scroll.refresh, 150)
+      this.$bus.$on('itemImageLoad', () => refresh())
+    },
     methods: {
       /**
        * 事件监听相关方法
        */
       tabClick(index) {
         this.currentType = Object.keys(this.goods)[index]
+        this.$refs.tabControlFixed.currentIndex = this.$refs.tabControlScroll.currentIndex = index;
       },
       backClick() {
         this.$refs.scroll.scrollTo(0, 0)
       },
       contentScroll(position) {
-        this.isShowBackTop = (-position.y) > 1000;
+        //1.是否显示BackTop
+        this.isShowBackTop = (-position.y) > 1000
+
+        //2.tabControl是否吸顶
+        this.isTabFixed = (-position.y) > this.tabOffsetTop
       },
       loadMore() {
         this.getHomeGoods(this.currentType)
-        this.$refs.scroll.finishPullUp()
+      },
+      imageLoad() {
+        this.tabOffsetTop = this.$refs.tabControlScroll.$el.offsetTop;
       },
       /**
        * 网络请求相关方法
@@ -98,9 +107,10 @@
         getHomeGoods(type, page)
           .then(res => {
             this.goods[type].list.push(...res.data.list)
+            this.goods[type].page += 1
           })
           .finally(() => {
-            this.$refs.scroll.scroll.refresh()
+            this.$refs.scroll.finishPullUp()
           })
       },
     },
@@ -108,29 +118,15 @@
 </script>
 
 <style scoped>
-  #home {
-    height: 100vh;
-    padding-top: 44px;
-  }
+  #home { height: 100vh; }
 
   .home-nav {
     color: white;
     background-color: var(--color-tint);
-
-    position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
-    z-index: 10;
-  }
-
-  .tab-control {
-    position: sticky;
-    top: 44px;
   }
 
   .content {
-    height: calc(100% - 44px);
+    height: calc(100% - 93px);
     overflow: hidden;
   }
 </style>
