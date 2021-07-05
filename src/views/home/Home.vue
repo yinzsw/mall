@@ -56,6 +56,7 @@
         },
         currentType: 'pop',
         isShowBackTop: false,
+        saveY: 0,
       }
     },
     created() {
@@ -68,6 +69,12 @@
     mounted() {
       const refresh = debounce(this.$refs.scroll.refresh, 150)
       this.$bus.$on('itemImageLoad', () => refresh())
+    },
+    activated() {
+      this.$refs.scroll.scrollTo(0, this.saveY, 0)
+    },
+    deactivated() {
+      this.saveY = this.$refs.scroll.getScrollY()
     },
     methods: {
       /**
