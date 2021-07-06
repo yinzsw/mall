@@ -37,11 +37,11 @@
 
 <style scoped>
   .base-info {
-    padding: 8px 8px 16px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
     text-align: justify;
-    box-shadow: 0 1px 8px #E2E2E2;
+    box-shadow: 0 2px 8px #E2E2E2;
   }
 
   .base-info > div { margin-bottom: 8px; }
@@ -73,8 +73,8 @@
   .discount {
     color: white;
     margin-bottom: 10px;
-    border-radius: 6px;
-    padding: 2px 3px;
+    border-radius: 4px;
+    padding: 2px 4px;
     align-self: start;
   }
 
@@ -82,13 +82,15 @@
     display: flex;
     justify-content: space-between;
     color: #898989;
-    padding-bottom: 8px;
+    padding: 8px 0 ;
     border-bottom: 1px solid #EAEAEA;
   }
 
   .info-service {
     display: flex;
+    padding: 10px 0;
     color: #010101;
+    font-size: 15px;
     justify-content: space-between;
   }
 
