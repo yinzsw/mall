@@ -1,7 +1,7 @@
 <template>
 
   <tab-bar>
-    <tab-bar-item v-for="tabBarItem in tabBarItems" :path=tabBarItem.path :activeColor=tabBarColor>
+    <tab-bar-item v-for="(tabBarItem,index) in tabBarItems" :key="index" :path=tabBarItem.path :activeColor=tabBarColor>
       <template v-slot:item-icon>
         <img :src='tabBarItem.imgUrl'>
       </template>
@@ -46,7 +46,7 @@
       imgUrlActive: require("assets/img/tabbar/profile_active.svg")
     }
   ]
-  const tabBarColor = '#ff5777'
+  const tabBarColor = '#FF5777'
   export default {
     name: "MainTabBar",
     data() {

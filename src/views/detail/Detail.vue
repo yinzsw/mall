@@ -1,11 +1,11 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav"/>
-    <scroll class="content">
+    <scroll class="content" ref="scroll">
       <detail-swiper :topImages="topImages"/>
       <detail-base-info :goods="goods"/>
       <detail-shop-info :shop="shop"/>
-      <detail-goods-info :detailInfo="detailInfo"/>
+      <detail-goods-info :detailInfo="detailInfo" @imgLoad="imgLoad"/>
       <detail-param-info :paramInfo="paramInfo"/>
     </scroll>
   </div>
@@ -18,8 +18,8 @@
   import DetailSwiper from "./childComps/DetailSwiper";
   import DetailBaseInfo from "./childComps/DetailBaseInfo";
   import DetailShopInfo from "./childComps/DetailShopInfo";
-  import DetailParamInfo from "./childComps/DetailParamInfo";
   import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
+  import DetailParamInfo from "./childComps/DetailParamInfo";
 
   import {getDetail, Goods, Shop, GoodsParam} from "network/detail";
 
@@ -67,6 +67,11 @@
         const [info, rule] = [data.itemParams.info, data.itemParams.rule]
         this.paramInfo = new GoodsParam(info, rule)
       })
+    },
+    methods: {
+      imgLoad(){
+        this.$refs.scroll.refresh()
+      }
     }
   }
 </script>
