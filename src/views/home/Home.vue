@@ -16,6 +16,7 @@
   </div>
 </template>
 
+
 <script>
   import NavBar from "components/common/navbar/NavBar";
   import Scroll from "components/common/scroll/Scroll";
