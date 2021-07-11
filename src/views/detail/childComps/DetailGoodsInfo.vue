@@ -31,7 +31,12 @@
     },
     methods: {
       imgLoad() {
-        if (++this.counter === this.imaLength) this.$emit('imageLoad')
+        let imgTimer;
+        if (!this.counter) imgTimer = setTimeout(this.$emit('imageLoad'), 800)
+        if (++this.counter === this.imaLength) {
+          this.$emit('imageLoad')
+          clearTimeout(imgTimer)
+        }
       }
     },
     watch: {

@@ -2,11 +2,12 @@
   <div id="detail">
     <detail-nav-bar class="detail-nav"/>
     <scroll class="content" ref="scroll">
-      <detail-swiper :topImages="topImages"/>
+      <detail-swiper :top-images="topImages"/>
       <detail-base-info :goods="goods"/>
       <detail-shop-info :shop="shop"/>
-      <detail-goods-info :detailInfo="detailInfo" @imgLoad="imgLoad"/>
-      <detail-param-info :paramInfo="paramInfo"/>
+      <detail-goods-info :detail-info="detailInfo" @imgLoad="imgLoad"/>
+      <detail-param-info :param-info="paramInfo"/>
+      <detail-comment-info :comment-info="commentInfo"/>
     </scroll>
   </div>
 </template>
@@ -20,6 +21,7 @@
   import DetailShopInfo from "./childComps/DetailShopInfo";
   import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
   import DetailParamInfo from "./childComps/DetailParamInfo";
+  import DetailCommentInfo from "./childComps/DetailCommentInfo";
 
   import {getDetail, Goods, Shop, GoodsParam} from "network/detail";
 
@@ -32,7 +34,8 @@
       DetailBaseInfo,
       DetailShopInfo,
       DetailGoodsInfo,
-      DetailParamInfo
+      DetailParamInfo,
+      DetailCommentInfo,
     },
     data() {
       return {
@@ -41,35 +44,40 @@
         goods: {},
         shop: {},
         detailInfo: {},
-        paramInfo: {}
+        paramInfo: {},
+        commentInfo: {}
       }
     },
     created() {
       this.iid = this.$route.params.iid
 
       getDetail(this.iid).then(r => {
+        //0. 获取数据
         const data = r.result
 
-        //获取顶部轮播图片数据
+        //1. 获取顶部轮播图片数据
         this.topImages = data.itemInfo.topImages
 
-        //获取商品详细数据
+        //2. 获取商品详细数据
         const [itemInfo, columns, services] = [data.itemInfo, data.columns, data.shopInfo.services]
         this.goods = new Goods(itemInfo, columns, services)
 
-        //获取商店详细数据
+        //3. 获取商店详细数据
         this.shop = new Shop(data.shopInfo)
 
-        //获取商店详细数据
+        //4. 获取商店详细数据
         this.detailInfo = data.detailInfo
 
-        //获取参数信息
+        //5. 获取参数信息
         const [info, rule] = [data.itemParams.info, data.itemParams.rule]
         this.paramInfo = new GoodsParam(info, rule)
+
+        //6. 获取评论信息
+        if (data.rate.cRate !== 0) this.commentInfo = data.rate.list[0]
       })
     },
     methods: {
-      imgLoad(){
+      imgLoad() {
         this.$refs.scroll.refresh()
       }
     }
@@ -81,7 +89,7 @@
     height: 100vh;
     position: relative;
     background-color: #FFF;
-    z-index: 5;
+    z-index: 1;
   }
 
   .detail-nav {
@@ -90,7 +98,5 @@
     z-index: 1;
   }
 
-  .content {
-    height: calc(100% - 44px);
-  }
+  .content { height: calc(100% - 44px); }
 </style>

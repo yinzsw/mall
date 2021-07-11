@@ -60,9 +60,7 @@
     margin-right: 20px;
   }
 
-  .goods-info .collect {
-    position: relative;
-  }
+  .goods-info .collect { position: relative; }
 
   .goods-info .collect::before {
     content: '';

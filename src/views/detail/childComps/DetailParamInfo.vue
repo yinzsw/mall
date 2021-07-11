@@ -1,5 +1,5 @@
 <template>
-  <div class="param-info" v-if="Object.keys(paramInfo).length>0">
+  <div class="param-info" v-if="Object.keys(paramInfo).length > 0">
     <table v-for="(sizeV,sizeK) in paramInfo.sizes" :key="sizeK" class="info-size">
       <tr v-for="(sizV,sizK) in sizeV" :key="sizK">
         <td v-for="(siV,siK) in sizV" :key="siK">{{siV}}</td>
@@ -51,7 +51,7 @@
 
   .info-param { border-top: 1px solid rgba(0, 0, 0, .1); }
 
-  .param-value { color: #EB4868 }
+  .param-value { color: #EB4868; }
 
   .info-img img { width: 100%; }
 </style>
