@@ -30,6 +30,8 @@
 
   import {getHomeMultiData, getHomeGoods} from "network/home";
   import {debounce} from "common/utils";
+  import {NEW, POP, SELL, BACKTOP_DISTANCE} from "common/const";
+  import {backTopMixin} from "common/mixin";
 
   export default {
     name: "Home",
@@ -43,6 +45,7 @@
       HomeRecommend,
       HomeFeature,
     },
+    mixins: [backTopMixin],
     data() {
       return {
         banners: [],
@@ -55,17 +58,16 @@
           'new': {page: 0, list: []},
           'sell': {page: 0, list: []},
         },
-        currentType: 'pop',
-        isShowBackTop: false,
+        currentType: POP,
         saveY: 0
       }
     },
     created() {
       this.getHomeMultiData()
 
-      this.getHomeGoods('pop')
-      this.getHomeGoods('new')
-      this.getHomeGoods('sell')
+      this.getHomeGoods(POP)
+      this.getHomeGoods(NEW)
+      this.getHomeGoods(SELL)
     },
     mounted() {
       const refresh = debounce(this.$refs.scroll.refresh, 150)
@@ -86,12 +88,9 @@
         this.currentType = Object.keys(this.goods)[index]
         this.$refs.tabControlFixed.currentIndex = this.$refs.tabControlScroll.currentIndex = index;
       },
-      backClick() {
-        this.$refs.scroll.scrollTo(0, 0)
-      },
       contentScroll(position) {
         //1.是否显示BackTop
-        this.isShowBackTop = (-position.y) > 1000
+        this.isShowBackTop = (-position.y) > BACKTOP_DISTANCE
 
         //2.tabControl是否吸顶
         this.isTabFixed = (-position.y) > this.tabOffsetTop

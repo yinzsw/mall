@@ -10,12 +10,15 @@
       <detail-comment-info :commentInfo="commentInfo" ref="comment"/>
       <goods-list :goods="recommends" ref="recommend"/>
     </scroll>
+    <detail-bottom-bar/>
+    <back-top @click.native="backClick" v-show="isShowBackTop"/>
   </div>
 </template>
 
 <script>
   import Scroll from "components/common/scroll/Scroll";
   import GoodsList from "components/content/goods/GoodsList";
+  import BackTop from "components/content/backtop/BackTop";
 
   import DetailNavBar from "./childComps/DetailNavBar";
   import DetailSwiper from "./childComps/DetailSwiper";
@@ -24,15 +27,19 @@
   import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
   import DetailParamInfo from "./childComps/DetailParamInfo";
   import DetailCommentInfo from "./childComps/DetailCommentInfo";
+  import DetailBottomBar from "./childComps/DetailBottomBar";
 
   import {getDetail, getRecommend, Goods, Shop, GoodsParam} from "network/detail";
   import {debounce} from "common/utils";
+  import {BACKTOP_DISTANCE} from "common/const";
+  import {backTopMixin} from "common/mixin";
 
   export default {
     name: "Detail",
     components: {
       Scroll,
       GoodsList,
+      BackTop,
       DetailNavBar,
       DetailSwiper,
       DetailBaseInfo,
@@ -40,7 +47,9 @@
       DetailGoodsInfo,
       DetailParamInfo,
       DetailCommentInfo,
+      DetailBottomBar
     },
+    mixins:[backTopMixin],
     data() {
       return {
         iid: '',
@@ -107,6 +116,7 @@
       },
       contentScroll(position) {
         const positionY = -position.y
+
         for (const k in this.titlePosition) {
           let index = ~~k;
           let maxIndex = this.titlePosition.length - 1
@@ -118,6 +128,8 @@
             this.$refs.nav.currentIndex = index
           }
         }
+
+        this.isShowBackTop = (-position.y) > BACKTOP_DISTANCE
       }
     }
   }
@@ -137,5 +149,8 @@
     z-index: 1;
   }
 
-  .content { height: calc(100% - 44px); }
+  .content {
+    height: calc(100% - 44px - 49px);
+    background-color: #FFF;
+  }
 </style>
