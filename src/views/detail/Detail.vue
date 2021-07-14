@@ -10,7 +10,7 @@
       <detail-comment-info :commentInfo="commentInfo" ref="comment"/>
       <goods-list :goods="recommends" ref="recommend"/>
     </scroll>
-    <detail-bottom-bar/>
+    <detail-bottom-bar @addCart="addCart"/>
     <back-top @click.native="backClick" v-show="isShowBackTop"/>
   </div>
 </template>
@@ -49,7 +49,7 @@
       DetailCommentInfo,
       DetailBottomBar
     },
-    mixins:[backTopMixin],
+    mixins: [backTopMixin],
     data() {
       return {
         iid: '',
@@ -130,6 +130,18 @@
         }
 
         this.isShowBackTop = (-position.y) > BACKTOP_DISTANCE
+      },
+      addCart() {
+        //获取商品信息
+        const product = {}
+        product.iid = this.iid;
+        product.image = this.topImages[0]
+        product.title = this.goods.title
+        product.desc = this.goods.desc;
+        product.newPrice = this.goods.realPrice;
+
+        //添加到购物车
+        this.$store.commit('addCart', product)
       }
     }
   }
