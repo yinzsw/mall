@@ -1,7 +1,7 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" @titleClick="titleClick"/>
-    <scroll class="content" ref="scroll">
+    <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="nav"/>
+    <scroll class="content" ref="scroll" :probeType="3" @scroll="contentScroll">
       <detail-swiper :topImages="topImages" ref="base"/>
       <detail-base-info :goods="goods"/>
       <detail-shop-info :shop="shop"/>
@@ -51,7 +51,8 @@
         paramInfo: {},
         commentInfo: {},
         recommends: [],
-        titlePosition: []
+        titlePosition: [],
+        currentIndex: 0
       }
     },
     created() {
@@ -87,22 +88,36 @@
       })
     },
     mounted() {
-      const refresh = debounce(this.imageLoad, 100)
+      const refresh = debounce(this.$refs.scroll.refresh, 100)
       this.$bus.$on('detailImageLoad', refresh)
     },
     methods: {
       imageLoad() {
-        this.$refs.scroll.refresh()
+        this.$refs.scroll.refresh();
         this.titlePosition = [
-          this.$refs.base.$el.offsetTop,
-          this.$refs.param.$el.offsetTop,
-          this.$refs.comment.$el.offsetTop,
-          this.$refs.recommend.$el.offsetTop,
+          this.$refs.base.$el.offsetTop - 44,
+          this.$refs.param.$el.offsetTop - 44,
+          this.$refs.comment.$el.offsetTop - 44,
+          this.$refs.recommend.$el.offsetTop - 44,
         ]
       },
       titleClick(index) {
-        if (!this.titlePosition[0]) return null;
-        this.$refs.scroll.scrollTo(0, -this.titlePosition[index] + 44, 150)
+        if (this.titlePosition[0] === undefined) return null;
+        this.$refs.scroll.scrollTo(0, -this.titlePosition[index], 150)
+      },
+      contentScroll(position) {
+        const positionY = -position.y
+        for (const k in this.titlePosition) {
+          let index = ~~k;
+          let maxIndex = this.titlePosition.length - 1
+          const isCurrentIndex = this.currentIndex === index;
+          const isInScope1 = positionY >= this.titlePosition[index] && positionY < this.titlePosition[index + 1];
+          const isInScope2 = index === maxIndex && positionY >= this.titlePosition[maxIndex];
+          if (!isCurrentIndex && (isInScope1 || isInScope2)) {
+            this.currentIndex = index
+            this.$refs.nav.currentIndex = index
+          }
+        }
       }
     }
   }
