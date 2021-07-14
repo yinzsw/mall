@@ -8,12 +8,14 @@
       <detail-goods-info :detail-info="detailInfo" @imgLoad="imgLoad"/>
       <detail-param-info :param-info="paramInfo"/>
       <detail-comment-info :comment-info="commentInfo"/>
+      <goods-list :goods="recommends"/>
     </scroll>
   </div>
 </template>
 
 <script>
   import Scroll from "components/common/scroll/Scroll";
+  import GoodsList from "components/content/goods/GoodsList";
 
   import DetailNavBar from "./childComps/DetailNavBar";
   import DetailSwiper from "./childComps/DetailSwiper";
@@ -23,12 +25,13 @@
   import DetailParamInfo from "./childComps/DetailParamInfo";
   import DetailCommentInfo from "./childComps/DetailCommentInfo";
 
-  import {getDetail, Goods, Shop, GoodsParam} from "network/detail";
+  import {getDetail, getRecommend, Goods, Shop, GoodsParam} from "network/detail";
 
   export default {
     name: "Detail",
     components: {
       Scroll,
+      GoodsList,
       DetailNavBar,
       DetailSwiper,
       DetailBaseInfo,
@@ -45,7 +48,8 @@
         shop: {},
         detailInfo: {},
         paramInfo: {},
-        commentInfo: {}
+        commentInfo: {},
+        recommends: [],
       }
     },
     created() {
@@ -74,6 +78,10 @@
 
         //6. 获取评论信息
         if (data.rate.cRate !== 0) this.commentInfo = data.rate.list[0]
+      })
+
+      getRecommend().then(r => {
+        this.recommends = r.data.list
       })
     },
     methods: {

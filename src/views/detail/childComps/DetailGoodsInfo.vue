@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Object.keys(detailInfo).length>0" class="goods-info">
+  <div v-if="Object.keys(detailInfo).length > 0" class="goods-info">
     <div class="info-desc clear-fix">
       <div class="start"></div>
       <div class="desc">{{detailInfo.desc}}</div>
@@ -31,12 +31,7 @@
     },
     methods: {
       imgLoad() {
-        let imgTimer;
-        if (!this.counter) imgTimer = setTimeout(this.$emit('imageLoad'), 800)
-        if (++this.counter === this.imaLength) {
-          this.$emit('imageLoad')
-          clearTimeout(imgTimer)
-        }
+        if (++this.counter === this.imaLength) this.$emit('imageLoad')
       }
     },
     watch: {
