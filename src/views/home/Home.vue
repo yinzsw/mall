@@ -4,7 +4,7 @@
       <template v-slot:center>购物街</template>
     </nav-bar>
     <tab-control :titles="tabTitles" @tabClick="tabClick" ref="tabControlFixed" v-show="isTabFixed"/>
-    <scroll class="content" ref="scroll" :probe-type="3" :pull-up-load="true" @scroll="contentScroll"
+    <scroll class="content" ref="scroll" :probeType="3" :pullUpLoad="true" @scroll="contentScroll"
             @pullingUp="loadMore">
       <home-swiper :banners="banners" @swiperImageLoad.once="imageLoad"></home-swiper>
       <home-recommend :recommends="recommends" @recommendImageLoad.once="imageLoad"></home-recommend>
@@ -29,7 +29,7 @@
   import HomeFeature from "./childComps/HomeFeature";
 
   import {getHomeMultiData, getHomeGoods} from "network/home";
-  import {debounce} from "common/utils"
+  import {debounce} from "common/utils";
 
   export default {
     name: "Home",
@@ -57,7 +57,7 @@
         },
         currentType: 'pop',
         isShowBackTop: false,
-        saveY: 0,
+        saveY: 0
       }
     },
     created() {
@@ -69,7 +69,7 @@
     },
     mounted() {
       const refresh = debounce(this.$refs.scroll.refresh, 150)
-      this.$bus.$on('itemImageLoad', () => refresh())
+      this.$bus.$on('homeImageLoad', refresh)
     },
     activated() {
       this.$refs.scroll.refresh()

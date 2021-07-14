@@ -22,15 +22,16 @@
     },
     computed: {
       showImg() {
-        return this.goodsItem.image || this.goodsItem.show.img
+        return this.goodsItem.img || this.goodsItem.image || this.goodsItem.show.img
       }
     },
     methods: {
       imageLoad() {
-        this.$bus.$emit('itemImageLoad');
+        let path = this.$route.path.split('/')[1]
+        this.$bus.$emit(`${path}ImageLoad`);
       },
       itemClick() {
-        this.$router.push(`/detail/${this.goodsItem.iid}`)
+        this.$router.push(`/detail/${this.goodsItem.iid || this.goodsItem.shop_id}`)
       }
     }
   }

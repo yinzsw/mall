@@ -1,14 +1,14 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav"/>
+    <detail-nav-bar class="detail-nav" @titleClick="titleClick"/>
     <scroll class="content" ref="scroll">
-      <detail-swiper :top-images="topImages"/>
+      <detail-swiper :topImages="topImages" ref="base"/>
       <detail-base-info :goods="goods"/>
       <detail-shop-info :shop="shop"/>
-      <detail-goods-info :detail-info="detailInfo" @imgLoad="imgLoad"/>
-      <detail-param-info :param-info="paramInfo"/>
-      <detail-comment-info :comment-info="commentInfo"/>
-      <goods-list :goods="recommends"/>
+      <detail-goods-info :detailInfo="detailInfo" @imageLoad="imageLoad"/>
+      <detail-param-info :paramInfo="paramInfo" ref="param"/>
+      <detail-comment-info :commentInfo="commentInfo" ref="comment"/>
+      <goods-list :goods="recommends" ref="recommend"/>
     </scroll>
   </div>
 </template>
@@ -26,6 +26,7 @@
   import DetailCommentInfo from "./childComps/DetailCommentInfo";
 
   import {getDetail, getRecommend, Goods, Shop, GoodsParam} from "network/detail";
+  import {debounce} from "common/utils";
 
   export default {
     name: "Detail",
@@ -50,6 +51,7 @@
         paramInfo: {},
         commentInfo: {},
         recommends: [],
+        titlePosition: []
       }
     },
     created() {
@@ -84,9 +86,23 @@
         this.recommends = r.data.list
       })
     },
+    mounted() {
+      const refresh = debounce(this.imageLoad, 100)
+      this.$bus.$on('detailImageLoad', refresh)
+    },
     methods: {
-      imgLoad() {
+      imageLoad() {
         this.$refs.scroll.refresh()
+        this.titlePosition = [
+          this.$refs.base.$el.offsetTop,
+          this.$refs.param.$el.offsetTop,
+          this.$refs.comment.$el.offsetTop,
+          this.$refs.recommend.$el.offsetTop,
+        ]
+      },
+      titleClick(index) {
+        if (!this.titlePosition[0]) return null;
+        this.$refs.scroll.scrollTo(0, -this.titlePosition[index] + 44, 150)
       }
     }
   }

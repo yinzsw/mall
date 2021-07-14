@@ -31,7 +31,9 @@
     },
     methods: {
       imgLoad() {
-        if (++this.counter === this.imaLength) this.$emit('imageLoad')
+        if (++this.counter === this.imaLength){
+          this.$emit('imageLoad')
+        }
       }
     },
     watch: {
