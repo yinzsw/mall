@@ -34,7 +34,7 @@
       imgUrlActive: require("assets/img/tabbar/category_active.svg")
     },
     {
-      path: "/shopcart",
+      path: "/cart",
       title: "购物车",
       imgUrl: require("assets/img/tabbar/shopcart.svg"),
       imgUrlActive: require("assets/img/tabbar/shopcart_active.svg")

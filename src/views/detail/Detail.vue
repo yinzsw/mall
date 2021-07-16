@@ -158,11 +158,11 @@
   .detail-nav {
     position: relative;
     background-color: #FFF;
-    z-index: 1;
   }
 
   .content {
-    height: calc(100% - 44px - 49px);
+    height: calc(100% - 93px);
     background-color: #FFF;
+    overflow: hidden;
   }
 </style>
