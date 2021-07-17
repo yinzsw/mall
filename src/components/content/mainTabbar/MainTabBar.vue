@@ -1,5 +1,4 @@
 <template>
-
   <tab-bar>
     <tab-bar-item v-for="(tabBarItem,index) in tabBarItems" :key="index" :path=tabBarItem.path :activeColor=tabBarColor>
       <template v-slot:item-icon>
@@ -13,7 +12,6 @@
       </template>
     </tab-bar-item>
   </tab-bar>
-
 </template>
 
 <script>
