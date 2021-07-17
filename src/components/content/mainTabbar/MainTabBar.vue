@@ -44,13 +44,12 @@
       imgUrlActive: require("assets/img/tabbar/profile_active.svg")
     }
   ]
-  const tabBarColor = '#FF5777'
   export default {
     name: "MainTabBar",
     data() {
       return {
         tabBarItems,
-        tabBarColor
+        tabBarColor: '#FF5777'
       }
     },
     components: {

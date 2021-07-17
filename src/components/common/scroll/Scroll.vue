@@ -19,6 +19,10 @@
       pullUpLoad: {
         type: Boolean,
         default: false
+      },
+      pullDownRefresh: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -29,18 +33,28 @@
     mounted() {
       this.scroll = new BScroll(this.$refs.scroll, {
         click: true,
+        scrollY: true,
         probeType: this.probeType,
-        pullUpLoad: this.pullUpLoad
+        pullUpLoad: this.pullUpLoad,
+        pullDownRefresh: this.pullDownRefresh
       })
+
       if (this.probeType === 2 || this.probeType === 3) {
         this.scroll.on('scroll', (position) => {
           this.$emit('scroll', position)
         })
       }
+
       if (this.pullUpLoad) {
         this.scroll.on('pullingUp', () => {
           this.$emit('pullingUp')
         })
+      }
+
+      if (this.pullDownRefresh) {
+        this.scroll.on('pullingDown', () => {
+          this.$emit('pullingDown');
+        });
       }
     },
     methods: {
@@ -49,6 +63,9 @@
       },
       finishPullUp() {
         this.scroll && this.scroll.finishPullUp()
+      },
+      finishPullDown() {
+        this.scroll && this.scroll.finishPullDown()
       },
       refresh() {
         this.scroll && this.scroll.refresh()

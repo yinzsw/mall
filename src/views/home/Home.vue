@@ -96,7 +96,7 @@
         this.isTabFixed = (-position.y) > this.tabOffsetTop
       },
       loadMore() {
-        this.getHomeGoods(this.currentType)
+        this.getHomeGoods(this.currentType).then(() => this.$refs.scroll.finishPullUp())
       },
       imageLoad() {
         this.tabOffsetTop = this.$refs.tabControlScroll.$el.offsetTop;
@@ -112,14 +112,10 @@
       },
       getHomeGoods(type) {
         const page = this.goods[type].page + 1;
-        getHomeGoods(type, page)
-          .then(res => {
-            this.goods[type].list.push(...res.data.list)
-            this.goods[type].page += 1
-          })
-          .finally(() => {
-            this.$refs.scroll.finishPullUp()
-          })
+        return getHomeGoods(type, page).then(res => {
+          this.goods[type].list.push(...res.data.list)
+          this.goods[type].page += 1
+        })
       },
     },
   }

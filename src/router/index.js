@@ -6,6 +6,7 @@ const Category = () => import('views/category/Category')
 const Cart = () => import('views/cart/Cart')
 const Profile = () => import('views/profile/Profile')
 const Detail = () => import('views/detail/Detail')
+const Refresh = () => import('components/common/refresh/Refresh')
 
 Vue.use(VueRouter)
 
@@ -34,6 +35,10 @@ const routes = [
     path: '/detail/:iid',
     component: Detail
   },
+  {
+    path: '/refresh',
+    component: Refresh
+  }
 ]
 
 const router = new VueRouter({

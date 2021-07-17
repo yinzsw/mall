@@ -1,7 +1,8 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="nav"/>
-    <scroll class="content" ref="scroll" :probeType="3" @scroll="contentScroll">
+    <scroll class="content" ref="scroll" :probeType="3" :pullDownRefresh="true"
+            @scroll="contentScroll" @pullingDown="updatePage">
       <detail-swiper :topImages="topImages" ref="base"/>
       <detail-base-info :goods="goods"/>
       <detail-shop-info :shop="shop"/>
@@ -109,6 +110,7 @@
           this.$refs.comment.$el.offsetTop - 44,
           this.$refs.recommend.$el.offsetTop - 44,
         ]
+        this.$refs.scroll.finishPullDown()
       },
       titleClick(index) {
         if (this.titlePosition[0] === undefined) return null;
@@ -142,6 +144,9 @@
 
         //添加到购物车
         this.$store.dispatch('addCart', product).then(r => this.$toast.show(r));
+      },
+      updatePage() {
+        this.$router.replace('/refresh');
       }
     }
   }
