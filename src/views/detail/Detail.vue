@@ -33,7 +33,6 @@
   import {getDetail, getRecommend, Goods, Shop, GoodsParam} from "network/detail";
   import {debounce} from "common/utils";
   import {BACKTOP_DISTANCE} from "common/const";
-  import {backTopMixin} from "common/mixin";
 
   export default {
     name: "Detail",
@@ -50,7 +49,6 @@
       DetailCommentInfo,
       DetailBottomBar
     },
-    mixins: [backTopMixin],
     data() {
       return {
         iid: '',
@@ -62,7 +60,8 @@
         commentInfo: {},
         recommends: [],
         titlePosition: [],
-        currentIndex: 0
+        currentIndex: 0,
+        isShowBackTop: false
       }
     },
     created() {
@@ -144,6 +143,9 @@
 
         //添加到购物车
         this.$store.dispatch('addCart', product).then(r => this.$toast.show(r));
+      },
+      backClick() {
+        this.$refs.scroll.scrollTo(0, 0)
       },
       updatePage() {
         this.$router.replace('/refresh');

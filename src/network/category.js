@@ -1,4 +1,4 @@
-import {request} from './axios'
+import {request} from './requests'
 
 export function getCategory() {
   return request({
@@ -19,8 +19,7 @@ export function getCategoryDetail(miniWallkey, type) {
   return request({
     url: '/subcategory/detail',
     params: {
-      miniWallkey,
-      type
+      miniWallkey, type
     }
   })
 }

@@ -31,7 +31,6 @@
   import {getHomeMultiData, getHomeGoods} from "network/home";
   import {debounce} from "common/utils";
   import {NEW, POP, SELL, BACKTOP_DISTANCE} from "common/const";
-  import {backTopMixin} from "common/mixin";
 
   export default {
     name: "Home",
@@ -45,7 +44,6 @@
       HomeRecommend,
       HomeFeature,
     },
-    mixins: [backTopMixin],
     data() {
       return {
         banners: [],
@@ -59,7 +57,8 @@
           'sell': {page: 0, list: []},
         },
         currentType: POP,
-        saveY: 0
+        saveY: 0,
+        isShowBackTop: false
       }
     },
     created() {
@@ -116,6 +115,9 @@
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page += 1
         })
+      },
+      backClick() {
+        this.$refs.scroll.scrollTo(0, 0)
       },
     },
   }
