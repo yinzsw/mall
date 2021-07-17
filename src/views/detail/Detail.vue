@@ -141,7 +141,7 @@
         product.newPrice = this.goods.realPrice;
 
         //添加到购物车
-        this.$store.dispatch('addCart', product);
+        this.$store.dispatch('addCart', product).then(r => this.$toast.show(r));
       }
     }
   }
