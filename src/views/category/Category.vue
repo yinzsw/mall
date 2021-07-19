@@ -3,9 +3,12 @@
     <nav-bar class="nav-bar">
       <template v-slot:center>商品分类</template>
     </nav-bar>
-    <div>
-      <scroll class="content">
+    <div class="content-box">
+      <scroll class="scroll-box">
         <cate-tab-menu :categories="categories" @selectItem="selectItem"/>
+      </scroll>
+      <scroll class="scroll-box">
+        <cate-content :subcategories="subCategoryDate"/>
       </scroll>
     </div>
   </div>
@@ -16,6 +19,7 @@
   import Scroll from "components/common/scroll/Scroll";
 
   import CateTabMenu from "./childComps/CateTabMenu";
+  import CateContent from "./childComps/CateContent";
 
   import {getCategory, getSubcategory, getCategoryDetail} from "network/category";
   import {POP, SELL, NEW} from "common/const";
@@ -26,6 +30,7 @@
       NavBar,
       Scroll,
       CateTabMenu,
+      CateContent
     },
     data() {
       return {
@@ -35,9 +40,12 @@
       }
     },
     created() {
-      this.getCategory().then(r => {
-        this.getSubcategories(0)
-      })
+      this.getCategory().then(() => this.getSubcategories(this.currentIndex))
+    },
+    computed: {
+      subCategoryDate() {
+        if (this.categoryData[this.currentIndex]) return this.categoryData[this.currentIndex].subcategories;
+      }
     },
     methods: {
       getCategory() {
@@ -59,7 +67,6 @@
         this.currentIndex = index;
         const mailKey = this.categories[index].maitKey;
         getSubcategory(mailKey).then(r => {
-          console.log(r)
           this.categoryData[index].subcategories = r.data
           this.categoryData = {...this.categoryData}
 
@@ -92,9 +99,12 @@
     font-weight: 600;
   }
 
-  .content {
+  .content-box { display: flex; }
+
+  .scroll-box {
     height: calc(100vh - 44px - 49px);
-    width: 100px;
     overflow: hidden;
   }
+
+  .scroll-box:nth-child(2) { flex: 1; }
 </style>

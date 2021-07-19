@@ -1,7 +1,7 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="nav"/>
-    <scroll class="content" ref="scroll" :probeType="3" :pullDownRefresh="true"
+    <scroll class="scroll-box" ref="scroll" :probeType="3" :pullDownRefresh="true"
             @scroll="contentScroll" @pullingDown="updatePage">
       <detail-swiper :topImages="topImages" ref="base"/>
       <detail-base-info :goods="goods"/>
@@ -167,7 +167,7 @@
     background-color: #FFF;
   }
 
-  .content {
+  .scroll-box {
     height: calc(100% - 93px);
     background-color: #FFF;
     overflow: hidden;

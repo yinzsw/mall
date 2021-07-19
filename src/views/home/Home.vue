@@ -4,7 +4,7 @@
       <template v-slot:center>购物街</template>
     </nav-bar>
     <tab-control :titles="tabTitles" @tabClick="tabClick" ref="tabControlFixed" v-show="isTabFixed"/>
-    <scroll class="content" ref="scroll" :probeType="3" :pullUpLoad="true" @scroll="contentScroll"
+    <scroll class="scroll-box" ref="scroll" :probeType="3" :pullUpLoad="true" @scroll="contentScroll"
             @pullingUp="loadMore">
       <home-swiper :banners="banners" @swiperImageLoad.once="imageLoad"></home-swiper>
       <home-recommend :recommends="recommends" @recommendImageLoad.once="imageLoad"></home-recommend>
@@ -131,7 +131,7 @@
     background-color: var(--color-tint);
   }
 
-  .content {
+  .scroll-box {
     height: calc(100% - 93px);
     overflow: hidden;
   }
