@@ -1,10 +1,10 @@
 <template>
-  <div class="comment-info" v-if="Object.keys(commentInfo).length > 0">
+  <div class="comment-info">
     <div class="info-header">
       <div class="header-title">用户评价</div>
       <div class="header-more">更多<i class="arrow-right"></i></div>
     </div>
-    <div class="info-user">
+    <div class="info-user" v-if="commentInfo.user">
       <img :src="commentInfo.user.avatar" alt="">
       <span>{{commentInfo.user.uname}}</span>
     </div>

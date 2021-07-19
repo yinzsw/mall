@@ -58,8 +58,11 @@
       }
     },
     methods: {
-      scrollTo(x, y, timeout = 500) {
-        this.scroll && this.scroll.scrollTo(x, y, timeout);
+      scrollTo(x, y, time = 500) {
+        this.scroll && this.scroll.scrollTo(x, y, time);
+      },
+      scrollToElement(el, time = 500, x = 0, y = 0) {
+        this.scroll && this.scroll.scrollToElement(el, time, x, y);
       },
       finishPullUp() {
         this.scroll && this.scroll.finishPullUp()

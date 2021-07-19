@@ -2,7 +2,7 @@
   <grid-view :columns="3" :rowGap="15" :margin="[16,8]" v-if="subcategories.list">
     <div class="item" v-for="(item, index) in subcategories.list" :key="index">
       <a :href="item.link">
-        <img class="item-img" :src="item.image" alt="">
+        <img class="item-img" :src="item.image" alt="" @load="imageLoad">
         <div class="item-text">{{item.title}}</div>
       </a>
     </div>
@@ -23,6 +23,11 @@
         default() {
           return {}
         }
+      }
+    },
+    methods: {
+      imageLoad() {
+        this.$emit('imageLoad');
       }
     }
   }

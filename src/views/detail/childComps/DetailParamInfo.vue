@@ -1,5 +1,5 @@
 <template>
-  <div class="param-info" v-if="Object.keys(paramInfo).length > 0">
+  <div class="param-info">
     <table v-for="(sizeV,sizeK) in paramInfo.sizes" :key="sizeK" class="info-size">
       <tr v-for="(sizV,sizK) in sizeV" :key="sizK">
         <td v-for="(siV,siK) in sizV" :key="siK">{{siV}}</td>
@@ -11,7 +11,7 @@
         <td class="param-value">{{infoV.value}}</td>
       </tr>
     </table>
-    <div class="info-img" v-if="paramInfo.image.length > 0">
+    <div class="info-img" v-if="paramInfo.image">
       <img :src="paramInfo.image" alt="">
     </div>
   </div>

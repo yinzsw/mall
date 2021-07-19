@@ -1,12 +1,12 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="nav"/>
-    <scroll class="scroll-box" ref="scroll" :probeType="3" :pullDownRefresh="true"
-            @scroll="contentScroll" @pullingDown="updatePage">
-      <detail-swiper :topImages="topImages" ref="base"/>
+    <scroll class="scroll-box" ref="scroll" :pullDownRefresh="true" :probeType="2"
+            @scroll="titleActive" @pullingDown="updatePage">
+      <detail-swiper :topImages="topImages" ref="swiper"/>
       <detail-base-info :goods="goods"/>
       <detail-shop-info :shop="shop"/>
-      <detail-goods-info :detailInfo="detailInfo" @imageLoad="imageLoad"/>
+      <detail-goods-info :detailInfo="detailInfo" @imageLoad="imageLoad" ref="goods"/>
       <detail-param-info :paramInfo="paramInfo" ref="param"/>
       <detail-comment-info :commentInfo="commentInfo" ref="comment"/>
       <goods-list :goods="recommends" ref="recommend"/>
@@ -31,8 +31,8 @@
   import DetailBottomBar from "./childComps/DetailBottomBar";
 
   import {getDetail, getRecommend, Goods, Shop, GoodsParam} from "network/detail";
-  import {debounce} from "common/utils";
   import {BACKTOP_DISTANCE} from "common/const";
+  import {debounce} from "common/utils";
 
   export default {
     name: "Detail",
@@ -59,7 +59,11 @@
         paramInfo: {},
         commentInfo: {},
         recommends: [],
-        titlePosition: [],
+        titleLocationDom: [],
+        titleActivePosition: [],
+        refreshDeb: null,
+        positionDeb: null,
+        titleActiveDeb: null,
         currentIndex: 0,
         isShowBackTop: false
       }
@@ -67,7 +71,7 @@
     created() {
       this.iid = this.$route.params.iid
 
-      getDetail(this.iid).then(r => {
+      const _getDetail = getDetail(this.iid).then(r => {
         //0. 获取数据
         const data = r.result
 
@@ -92,45 +96,52 @@
         if (data.rate.cRate !== 0) this.commentInfo = data.rate.list[0]
       })
 
-      getRecommend().then(r => {
-        this.recommends = r.data.list
-      })
+      const _getRecommend = getRecommend().then(r => this.recommends = r.data.list)
+
+      Promise.all([_getDetail, _getRecommend]).then(() => this.$refs.scroll.finishPullDown())
     },
     mounted() {
-      const refresh = debounce(this.$refs.scroll.refresh, 100)
-      this.$bus.$on('detailImageLoad', refresh)
+      this.refreshDeb = debounce(this.$refs.scroll.refresh, 100);
+      this.$bus.$on('detailImageLoad', this.refreshDeb);
+
+      this.positionDeb = debounce(this.debPosition, 100);
+
+      this.titleActiveDeb = debounce(this.debTitleActive, 15);
+
+      this.$nextTick(() => {
+        this.titleLocationDom = [
+          this.$refs.swiper.$el,
+          this.$refs.param.$el,
+          this.$refs.comment.$el,
+          this.$refs.recommend.$el,
+        ];
+      })
     },
     methods: {
       imageLoad() {
-        this.$refs.scroll.refresh();
-        this.titlePosition = [
-          this.$refs.base.$el.offsetTop - 44,
-          this.$refs.param.$el.offsetTop - 44,
-          this.$refs.comment.$el.offsetTop - 44,
-          this.$refs.recommend.$el.offsetTop - 44,
-        ]
-        this.$refs.scroll.finishPullDown()
+        this.refreshDeb && this.refreshDeb();
+        this.positionDeb && this.positionDeb();
+      },
+      debPosition() {
+        this.titleActivePosition = this.titleLocationDom.map(item => item.offsetTop - 44);
+      },
+      titleActive(position) {
+        this.titleActiveDeb && this.titleActiveDeb(position)
+      },
+      debTitleActive(position) {
+        //判断内容所在导航分类
+        const offsetTop = -position.y;
+        const temp = [...this.titleActivePosition];
+        temp.push(offsetTop);
+        temp.sort((a, b) => a - b)
+        const index = temp.lastIndexOf(offsetTop)
+        this.$refs.nav && (this.$refs.nav.currentIndex = index - 1);
+
+        //显示回到顶部
+        this.isShowBackTop = offsetTop > BACKTOP_DISTANCE
       },
       titleClick(index) {
-        if (this.titlePosition[0] === undefined) return null;
-        this.$refs.scroll.scrollTo(0, -this.titlePosition[index], 150)
-      },
-      contentScroll(position) {
-        const positionY = -position.y
-
-        for (const k in this.titlePosition) {
-          let index = ~~k;
-          let maxIndex = this.titlePosition.length - 1
-          const isCurrentIndex = this.currentIndex === index;
-          const isInScope1 = positionY >= this.titlePosition[index] && positionY < this.titlePosition[index + 1];
-          const isInScope2 = index === maxIndex && positionY >= this.titlePosition[maxIndex];
-          if (!isCurrentIndex && (isInScope1 || isInScope2)) {
-            this.currentIndex = index
-            this.$refs.nav.currentIndex = index
-          }
-        }
-
-        this.isShowBackTop = (-position.y) > BACKTOP_DISTANCE
+        this.$refs.scroll.scrollToElement(this.titleLocationDom[index], 200);
       },
       addCart() {
         //获取商品信息
@@ -148,7 +159,7 @@
         this.$refs.scroll.scrollTo(0, 0)
       },
       updatePage() {
-        this.$router.replace('/refresh');
+        setTimeout(() => this.$router.replace('/refresh'), 200)
       }
     }
   }

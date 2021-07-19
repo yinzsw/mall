@@ -1,12 +1,12 @@
 <template>
-  <div v-if="Object.keys(detailInfo).length > 0" class="goods-info">
+  <div class="goods-info">
     <div class="info-desc clear-fix">
       <div class="start"></div>
       <div class="desc">{{detailInfo.desc}}</div>
       <div class="end"></div>
     </div>
-    <div class="info-key">{{detailInfo.detailImage[0].key}}</div>
-    <div class="info-list">
+    <div class="info-key">{{detailInfo.detailImage && detailInfo.detailImage[0].key}}</div>
+    <div class="info-list" v-if="detailInfo.detailImage">
       <img v-for="(item,index) in detailInfo.detailImage[0].list" :key="index" :src="item" @load="imgLoad" alt="">
     </div>
   </div>
@@ -23,22 +23,9 @@
         }
       }
     },
-    data() {
-      return {
-        counter: 0,
-        imaLength: 0,
-      }
-    },
     methods: {
       imgLoad() {
-        if (++this.counter === this.imaLength){
-          this.$emit('imageLoad')
-        }
-      }
-    },
-    watch: {
-      detailInfo() {
-        this.imaLength = this.detailInfo.detailImage[0].list.length
+        this.$emit('imageLoad');
       }
     }
   }

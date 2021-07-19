@@ -7,8 +7,8 @@
       <scroll class="scroll-box">
         <cate-tab-menu :categories="categories" @selectItem="selectItem"/>
       </scroll>
-      <scroll class="scroll-box">
-        <cate-content :subcategories="subCategoryDate"/>
+      <scroll class="scroll-box" ref="scrollContent">
+        <cate-content :subcategories="subCategoryDate" @imageLoad="imageLoad"/>
       </scroll>
     </div>
   </div>
@@ -23,6 +23,7 @@
 
   import {getCategory, getSubcategory, getCategoryDetail} from "network/category";
   import {POP, SELL, NEW} from "common/const";
+  import {debounce} from "common/utils";
 
   export default {
     name: "Category",
@@ -36,11 +37,15 @@
       return {
         categories: [],
         categoryData: {},
-        currentIndex: 0
+        currentIndex: 0,
+        refreshContent: null
       }
     },
     created() {
       this.getCategory().then(() => this.getSubcategories(this.currentIndex))
+    },
+    mounted() {
+      this.refreshContent = debounce(this.$refs.scrollContent.refresh, 150);
     },
     computed: {
       subCategoryDate() {
@@ -85,6 +90,9 @@
       },
       selectItem(index) {
         this.getSubcategories(index)
+      },
+      imageLoad() {
+        this.refreshContent && this.refreshContent()
       }
     }
   }
