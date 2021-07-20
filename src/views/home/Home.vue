@@ -128,8 +128,9 @@
   #home { height: 100vh; }
 
   .home-nav {
-    color: white;
+    color: #FFF;
     background-color: var(--color-tint);
+    font-weight: 600;
   }
 
   .scroll-box {

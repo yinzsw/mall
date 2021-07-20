@@ -1,6 +1,6 @@
 <template>
   <div id="category">
-    <nav-bar class="nav-bar">
+    <nav-bar class="cate-bar">
       <template v-slot:center>商品分类</template>
     </nav-bar>
     <tab-control :titles="titles" @tabClick="tabClick" class="tab-control-fixed" ref="tabControlFixed"
@@ -145,7 +145,7 @@
 <style scoped>
   #category { height: 100vh; }
 
-  .nav-bar {
+  .cate-bar {
     color: #FFF;
     background-color: var(--color-tint);
     font-weight: 600;

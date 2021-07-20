@@ -14,7 +14,7 @@
         <span class="date">{{commentInfo.created | filterDate}}</span>
         <span>{{commentInfo.style}}</span>
       </div>
-      <div class="info-imgs" v-if="commentInfo.images !== undefined">
+      <div class="info-imgs" v-if="commentInfo.images">
         <img v-for="(item,index) in commentInfo.images" :src="item" :key="index" alt="">
       </div>
     </div>

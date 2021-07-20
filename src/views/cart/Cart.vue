@@ -1,6 +1,6 @@
 <template>
   <div id="cart">
-    <nav-bar class="nav-bar">
+    <nav-bar class="cart-bar">
       <template v-slot:center>购物车({{cartLength}})</template>
     </nav-bar>
     <scroll class="content" ref="scroll">
@@ -42,9 +42,11 @@
     background-color: #FFF;
   }
 
-  .nav-bar {
-    color: #FFFFFF;
+  .cart-bar {
+    color: #FFF;
     background-color: var(--color-tint);
+    font-weight: 600;
+
   }
 
   .content {

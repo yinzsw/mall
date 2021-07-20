@@ -1,6 +1,6 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="nav"/>
+    <detail-nav-bar class="detail-nav-bar" @titleClick="titleClick" ref="nav"/>
     <scroll class="scroll-box" ref="scroll" :pullDownRefresh="true" :probeType="2"
             @scroll="titleActive" @pullingDown="updatePage">
       <detail-swiper :topImages="topImages" ref="swiper"/>
@@ -175,7 +175,7 @@
     z-index: 1;
   }
 
-  .detail-nav {
+  .detail-nav-bar {
     position: relative;
     background-color: #FFF;
   }

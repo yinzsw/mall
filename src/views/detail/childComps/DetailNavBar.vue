@@ -1,6 +1,6 @@
 <template>
   <div id="detail-nav-bar">
-    <nav-bar>
+    <nav-bar class="detail-nav">
       <template v-slot:left>
         <div class="back" @click="backClick">
           <img src="~assets/img/common/back.svg" alt="">
