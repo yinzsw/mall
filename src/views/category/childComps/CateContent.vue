@@ -1,5 +1,5 @@
 <template>
-  <grid-view :columns="3" :rowGap="15" :margin="[16,8]" v-if="subcategories.list">
+  <grid-view :columns="3" :rowGap="15" :padding="[16, 8]" v-if="subcategories.list">
     <div class="item" v-for="(item, index) in subcategories.list" :key="index">
       <a :href="item.link">
         <img class="item-img" :src="item.image" alt="" @load="imageLoad">

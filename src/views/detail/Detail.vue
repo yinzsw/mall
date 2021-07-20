@@ -69,6 +69,8 @@
       }
     },
     created() {
+      this.$toast.show('数据请求中...', 888);
+
       this.iid = this.$route.params.iid
 
       const _getDetail = getDetail(this.iid).then(r => {
@@ -126,19 +128,19 @@
         this.titleActivePosition = this.titleLocationDom.map(item => item.offsetTop - 44);
       },
       titleActive(position) {
-        this.titleActiveDeb && this.titleActiveDeb(position)
+        this.titleActiveDeb && this.titleActiveDeb(position);
       },
       debTitleActive(position) {
         //判断内容所在导航分类
         const offsetTop = -position.y;
         const temp = [...this.titleActivePosition];
         temp.push(offsetTop);
-        temp.sort((a, b) => a - b)
-        const index = temp.lastIndexOf(offsetTop)
+        temp.sort((a, b) => a - b);
+        const index = temp.lastIndexOf(offsetTop);
         this.$refs.nav && (this.$refs.nav.currentIndex = index - 1);
 
         //显示回到顶部
-        this.isShowBackTop = offsetTop > BACKTOP_DISTANCE
+        this.isShowBackTop = offsetTop > BACKTOP_DISTANCE;
       },
       titleClick(index) {
         this.$refs.scroll.scrollToElement(this.titleLocationDom[index], 200);

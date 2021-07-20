@@ -20,7 +20,7 @@
         type: Number,
         default: 8
       },
-      margin: {
+      padding: {
         type: Array,
         default() {
           return [8]
@@ -36,7 +36,7 @@
         gridContainerStyle.gridTemplateColumns = " auto".repeat(this.columns);
         gridContainerStyle.gridRowGap = `${this.rowGap}px`;
         gridContainerStyle.gridColumnGap = `${this.columnGap}px`;
-        gridContainerStyle.margin = `${this.margin.join('px ')}px`
+        gridContainerStyle.padding = `${this.padding.join('px ')}px`
       }
     }
   }

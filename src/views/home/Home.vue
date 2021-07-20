@@ -29,8 +29,8 @@
   import HomeFeature from "./childComps/HomeFeature";
 
   import {getHomeMultiData, getHomeGoods} from "network/home";
-  import {debounce} from "common/utils";
   import {NEW, POP, SELL, BACKTOP_DISTANCE} from "common/const";
+  import {debounce} from "common/utils";
 
   export default {
     name: "Home",
@@ -88,17 +88,18 @@
         this.$refs.tabControlFixed.currentIndex = this.$refs.tabControlScroll.currentIndex = index;
       },
       contentScroll(position) {
+        const positionY = -position.y
         //1.是否显示BackTop
-        this.isShowBackTop = (-position.y) > BACKTOP_DISTANCE
+        this.isShowBackTop = positionY > BACKTOP_DISTANCE
 
         //2.tabControl是否吸顶
-        this.isTabFixed = (-position.y) > this.tabOffsetTop
+        this.isTabFixed = positionY > this.tabOffsetTop
       },
       loadMore() {
         this.getHomeGoods(this.currentType).then(() => this.$refs.scroll.finishPullUp())
       },
       imageLoad() {
-        this.tabOffsetTop = this.$refs.tabControlScroll.$el.offsetTop;
+        this.tabOffsetTop = this.$refs.tabControlScroll.$el.offsetTop - 44;
       },
       /**
        * 网络请求相关方法

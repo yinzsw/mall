@@ -3,26 +3,36 @@
     <nav-bar class="nav-bar">
       <template v-slot:center>商品分类</template>
     </nav-bar>
+    <tab-control :titles="titles" @tabClick="tabClick" class="tab-control-fixed" ref="tabControlFixed"
+                 v-show="isTabFixed"/>
     <div class="content-box">
       <scroll class="scroll-box">
         <cate-tab-menu :categories="categories" @selectItem="selectItem"/>
       </scroll>
-      <scroll class="scroll-box" ref="scrollContent">
+      <scroll class="scroll-box" :probeType="3" @scroll="contentScroll" ref="contentScroll">
         <cate-content :subcategories="subCategoryDate" @imageLoad="imageLoad"/>
+        <tab-control :titles="titles" @tabClick="tabClick" class="tab-control" ref="tabControlScroll"
+                     v-show="!isTabFixed"/>
+        <goods-list :goods="subCategoryDetails" class="goods-list"/>
       </scroll>
     </div>
+    <back-top @click.native="backClick" v-show="isShowBackTop"/>
   </div>
 </template>
 
 <script>
   import NavBar from "components/common/navbar/NavBar";
   import Scroll from "components/common/scroll/Scroll";
+  import TabControl from "components/content/tabControl/TabControl";
+  import GoodsList from "components/content/goods/GoodsList";
+  import BackTop from "components/content/backtop/BackTop";
 
   import CateTabMenu from "./childComps/CateTabMenu";
   import CateContent from "./childComps/CateContent";
+  import CateContentDetail from "./childComps/CateContentDetail";
 
   import {getCategory, getSubcategory, getCategoryDetail} from "network/category";
-  import {POP, SELL, NEW} from "common/const";
+  import {POP, SELL, NEW, BACKTOP_DISTANCE} from "common/const";
   import {debounce} from "common/utils";
 
   export default {
@@ -30,26 +40,43 @@
     components: {
       NavBar,
       Scroll,
+      TabControl,
+      GoodsList,
+      BackTop,
       CateTabMenu,
-      CateContent
+      CateContent,
+      CateContentDetail
     },
     data() {
       return {
         categories: [],
         categoryData: {},
         currentIndex: 0,
-        refreshContent: null
+        refreshContent: null,
+        titles: ['流行', '新款', '精选'],
+        currentType: POP,
+        isTabFixed: false,
+        tabOffsetTop: 0,
+        isShowBackTop: false
       }
     },
     created() {
       this.getCategory().then(() => this.getSubcategories(this.currentIndex))
     },
     mounted() {
-      this.refreshContent = debounce(this.$refs.scrollContent.refresh, 150);
+      this.refreshContent = debounce(this.$refs.contentScroll.refresh, 100);
+
+      const refresh = debounce(this.$refs.contentScroll.refresh, 100);
+      this.$bus.$on('categoryImageLoad', refresh);
     },
     computed: {
       subCategoryDate() {
-        if (this.categoryData[this.currentIndex]) return this.categoryData[this.currentIndex].subcategories;
+        if (this.categoryData[this.currentIndex])
+          return this.categoryData[this.currentIndex].subcategories;
+      },
+      subCategoryDetails() {
+        if (this.categoryData[this.currentIndex])
+          return this.categoryData[this.currentIndex].categoryDetail[this.currentType];
       }
     },
     methods: {
@@ -89,10 +116,27 @@
         })
       },
       selectItem(index) {
-        this.getSubcategories(index)
+        this.isTabFixed = false
+        this.getSubcategories(index);
       },
       imageLoad() {
         this.refreshContent && this.refreshContent()
+        this.tabOffsetTop = this.$refs.tabControlScroll.$el.offsetTop - 44;
+      },
+      tabClick(index) {
+        this.currentType = Object.keys(this.categoryData[0].categoryDetail)[index]
+        this.$refs.tabControlFixed.currentIndex = this.$refs.tabControlScroll.currentIndex = index;
+      },
+      contentScroll(position) {
+        const positionY = -position.y;
+        //1.是否显示BackTop
+        this.isShowBackTop = positionY > BACKTOP_DISTANCE
+
+        //2.tabControl是否吸顶
+        this.isTabFixed = positionY > this.tabOffsetTop
+      },
+      backClick() {
+        this.$refs.contentScroll.scrollTo(0, 0)
       }
     }
   }
@@ -109,10 +153,19 @@
 
   .content-box { display: flex; }
 
+  .scroll-box:nth-child(2) { flex: 1; }
+
   .scroll-box {
     height: calc(100vh - 44px - 49px);
     overflow: hidden;
   }
 
-  .scroll-box:nth-child(2) { flex: 1; }
+  .tab-control-fixed {
+    position: absolute;
+    left: 100px;
+    width: calc(100vw - 100px);
+    z-index: 1;
+  }
+
+  .tab-control { margin-bottom: 10px; }
 </style>
