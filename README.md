@@ -1,10 +1,10 @@
 # Vue2 学习项目一(Mall)
 ### 示例图
-<img src="https://github.com/yinzsw/mall/tree/main/README/home.png" width="50%" title="home.Vue示例图">
-<img src="https://github.com/yinzsw/mall/tree/main/README/category.png" width="50%" title="category.Vue示例图">
-<img src="https://github.com/yinzsw/mall/tree/main/README/cart.png" width="50%" title="cart.Vue示例图">
-<img src="https://github.com/yinzsw/mall/tree/main/README/profile.png" width="50%" title="profile.Vue示例图">
-<img src="https://github.com/yinzsw/mall/tree/main/README/detail.png" width="50%" title="detail.Vue示例图">
+<img src="https://raw.githubusercontent.com/yinzsw/mall/main/README/home.png" width="50%" title="home.Vue示例图">
+<img src="https://raw.githubusercontent.com/yinzsw/mall/main/README/category.png" width="50%" title="category.Vue示例图">
+<img src="https://raw.githubusercontent.com/yinzsw/mall/main/README/cart.png" width="50%" title="cart.Vue示例图">
+<img src="https://raw.githubusercontent.com/yinzsw/mall/main/README/profile.png" width="50%" title="profile.Vue示例图">
+<img src="https://raw.githubusercontent.com/yinzsw/mall/main/README/detail.png" width="50%" title="detail.Vue示例图">
 
 ### 操作步骤
 ```
