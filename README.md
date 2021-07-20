@@ -1,6 +1,6 @@
 # Vue2 学习项目一(Mall)
 ### 示例图
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
 <img src="https://raw.githubusercontent.com/yinzsw/mall/main/README/home.png" width="30%" title="home.Vue示例图">
 <img src="https://raw.githubusercontent.com/yinzsw/mall/main/README/category.png" width="30%" title="category.Vue示例图">
 <img src="https://raw.githubusercontent.com/yinzsw/mall/main/README/cart.png" width="30%" title="cart.Vue示例图">
