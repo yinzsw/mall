@@ -45,8 +45,6 @@
 </script>
 
 <style scoped>
-  .profile-pur-info { border-bottom: 16px solid rgba(0, 0, 0, .12); }
-
   .account-item {
     color: #666;
     text-align: center;
